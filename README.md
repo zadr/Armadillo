@@ -4,10 +4,10 @@ A REPL for (almost) anything
 
 ## How?
 ### Quickstart
-% armadillo [-cmd foo] [-path path/to/directory]
+% `armadillo [-cmd foo] [-path path/to/directory]`
 
 - Without specifying a `-path` argument, `armadillo` defaults to the currently opened directory.
-- Without specifying a `-cmd` argument, `armadillo will try to guess what you want a REPL for. This is currently limited to `mercurial`, `svn`, and `git` repositories.
+- Without specifying a `-cmd` argument, `armadillo` will try to guess what you want a REPL for. This is currently limited to `mercurial`, `svn`, and `git` repositories.
 
 ### Example session
 ```
