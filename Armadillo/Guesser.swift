@@ -23,21 +23,21 @@ public struct REPL {
 		return REPL(binary: knownREPL.binary, args: knownREPL.args, failureExitStatus: knownREPL.failureExitStatus, directoryName: knownREPL.directoryName, checksForDirectory: knownREPL.checksForDirectory)
 	}
 
-	public static func repl(for directory: NSURL) -> REPL? {
+	public static func repl(for directory: URL) -> REPL? {
 		for p in knownREPLs {
 			if p.checksForDirectory {
-				let REPLDirectory = directory.URLByAppendingPathComponent(p.directoryName!)
-				if NSFileManager().fileExistsAtPath(REPLDirectory.absoluteString) {
+				let REPLDirectory = directory.appendingPathComponent(p.directoryName!)
+				if FileManager().fileExists(atPath: REPLDirectory.absoluteString) {
 					return REPL(binary: p.binary, args: p.args, failureExitStatus: p.failureExitStatus, directoryName: p.directoryName, checksForDirectory: p.checksForDirectory)
 				}
 			} else {
-				let task = NSTask()
-				task.launchPath = NSTask.which(p.binary)
+				let task = Process()
+				task.launchPath = Process.which(p.binary)
 				task.arguments = p.args
 
-				let pipe = NSPipe()
+				let pipe = Pipe()
 				task.standardOutput = pipe
-				task.standardError = NSPipe()
+				task.standardError = Pipe()
 
 				task.launch()
 				task.waitUntilExit()
@@ -52,12 +52,12 @@ public struct REPL {
 	}
 }
 
-private enum KnownREPL {
+fileprivate enum KnownREPL {
 	case mercurial
 	case subversion
 	case git
 
-	private var binary: String {
+	fileprivate var binary: String {
 		switch self {
 		case .mercurial: return "hg"
 		case .subversion: return "svn"
@@ -65,7 +65,7 @@ private enum KnownREPL {
 		}
 	}
 
-	private var args: [String] {
+	fileprivate var args: [String] {
 		switch self {
 		case .mercurial: return [ "status" ]
 		case .subversion: return [ "status" ]
@@ -73,7 +73,7 @@ private enum KnownREPL {
 		}
 	}
 
-	private var failureExitStatus: Int {
+	fileprivate var failureExitStatus: Int {
 		switch self {
 		case .mercurial: return 255
 		case .subversion: return 0
@@ -81,7 +81,7 @@ private enum KnownREPL {
 		}
 	}
 
-	private var directoryName: String? {
+	fileprivate var directoryName: String? {
 		switch self {
 		case .mercurial: return ".hg"
 		case .subversion: return ".svn"
@@ -89,7 +89,7 @@ private enum KnownREPL {
 		}
 	}
 
-	private var checksForDirectory: Bool {
+	fileprivate var checksForDirectory: Bool {
 		return self == .subversion
 	}
 }

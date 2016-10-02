@@ -22,11 +22,11 @@ public final class POSIXArgumentParser: ArgumentProvider {
 	}
 }
 #else
-public let argumentProvider = NSUserDefaults.standardUserDefaults()
+public let argumentProvider = UserDefaults.standard
 
-extension NSUserDefaults: ArgumentProvider {
+extension UserDefaults: ArgumentProvider {
 	public func value(forArgument name: String) -> ArgumentValue? {
-		let value = objectForKey(name)
+		let value = object(forKey: name)
 		switch value {
 		case let value as String: return value
 		case let value as Int: return value

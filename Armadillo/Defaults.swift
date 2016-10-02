@@ -5,23 +5,24 @@ import Foundation
 #endif
 
 public protocol Defaults {
-	func registerDefaults(registrationDictionary: [String : AnyObject])
+	func register(defaults registrationDictionary: [String : Any])
 
-	func objectForKey(defaultName: String) -> AnyObject?
-	func integerForKey(defaultName: String) -> Int
-	func floatForKey(defaultName: String) -> Float
-	func doubleForKey(defaultName: String) -> Double
-	func boolForKey(defaultName: String) -> Bool
+	func object(forKey defaultName: String) -> Any?
+	func set(_ value: Any?, forKey defaultName: String)
 
-	func setObject(value: AnyObject?, forKey defaultName: String)
-	func setInteger(value: Int, forKey defaultName: String)
-	func setFloat(value: Float, forKey defaultName: String)
-	func setDouble(value: Double, forKey defaultName: String)
-	func setBool(value: Bool, forKey defaultName: String)
+	func integer(forKey defaultName: String) -> Int
+	func float(forKey defaultName: String) -> Float
+	func double(forKey defaultName: String) -> Double
+	func bool(forKey defaultName: String) -> Bool
 
-	func removeObjectForKey(defaultName: String)
+	func set(_ value: Int, forKey defaultName: String)
+	func set(_ value: Float, forKey defaultName: String)
+	func set(_ value: Double, forKey defaultName: String)
+	func set(_ value: Bool, forKey defaultName: String)
 
-	static func defaultsProvider() -> Defaults
+	func removeObject(forKey defaultName: String)
+
+	static var provider: Defaults { get }
 }
 
 #if os(Linux) || os(FreeBSD)
@@ -45,9 +46,9 @@ public final class POSIXUserDefaults: Defaults {
 	public func removeObjectForKey(defaultName: String) { /* todo */ }
 }
 #else
-extension NSUserDefaults: Defaults {
-	public static func defaultsProvider() -> Defaults {
-		return NSUserDefaults.standardUserDefaults()
+extension UserDefaults: Defaults {
+	public static var provider: Defaults {
+		return UserDefaults.standard
 	}
 }
 #endif

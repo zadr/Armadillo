@@ -12,7 +12,7 @@
 		B67B52FD1D7F9886004A6414 /* which.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67B52FC1D7F9886004A6414 /* which.swift */; };
 		B67B52FF1D7F9A77004A6414 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67B52FE1D7F9A77004A6414 /* Command.swift */; };
 		B6C3ED651D8522910037432C /* ArgParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C3ED641D8522910037432C /* ArgParser.swift */; };
-		B6C3ED671D8524250037432C /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C3ED661D8524250037432C /* Program.swift */; };
+		B6C3ED671D8524250037432C /* Armadillo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C3ED661D8524250037432C /* Armadillo.swift */; };
 		B6C3ED691D852B330037432C /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C3ED681D852B330037432C /* Defaults.swift */; };
 		B6C3ED6B1D853DA30037432C /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C3ED6A1D853DA30037432C /* History.swift */; };
 /* End PBXBuildFile section */
@@ -36,7 +36,7 @@
 		B67B52FC1D7F9886004A6414 /* which.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = which.swift; sourceTree = "<group>"; };
 		B67B52FE1D7F9A77004A6414 /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		B6C3ED641D8522910037432C /* ArgParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgParser.swift; sourceTree = "<group>"; };
-		B6C3ED661D8524250037432C /* Program.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
+		B6C3ED661D8524250037432C /* Armadillo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Armadillo.swift; sourceTree = "<group>"; };
 		B6C3ED681D852B330037432C /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		B6C3ED6A1D853DA30037432C /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -72,12 +72,12 @@
 		B65796BE1D7F6238000FE342 /* code */ = {
 			isa = PBXGroup;
 			children = (
+				B6C3ED661D8524250037432C /* Armadillo.swift */,
 				B6C3ED641D8522910037432C /* ArgParser.swift */,
 				B67B52FE1D7F9A77004A6414 /* Command.swift */,
 				B6C3ED681D852B330037432C /* Defaults.swift */,
 				B67B52FA1D7F95D7004A6414 /* Guesser.swift */,
 				B6C3ED6A1D853DA30037432C /* History.swift */,
-				B6C3ED661D8524250037432C /* Program.swift */,
 				B67B52FC1D7F9886004A6414 /* which.swift */,
 			);
 			name = code;
@@ -115,6 +115,7 @@
 				TargetAttributes = {
 					B65796BB1D7F6238000FE342 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -146,7 +147,7 @@
 				B65796C01D7F6238000FE342 /* main.swift in Sources */,
 				B67B52FF1D7F9A77004A6414 /* Command.swift in Sources */,
 				B67B52FD1D7F9886004A6414 /* which.swift in Sources */,
-				B6C3ED671D8524250037432C /* Program.swift in Sources */,
+				B6C3ED671D8524250037432C /* Armadillo.swift in Sources */,
 				B6C3ED651D8522910037432C /* ArgParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -241,6 +242,7 @@
 			buildSettings = {
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				PRODUCT_NAME = armadillo;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -250,6 +252,7 @@
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				PRODUCT_NAME = armadillo;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

@@ -5,7 +5,7 @@ public struct Command {
 	private let args: [String]
 
 	public init?(raw: String) {
-		var components = raw.componentsSeparatedByString(" ")
+		var components = raw.components(separatedBy: " ")
 		guard !components.isEmpty else {
 			return nil
 		}
@@ -13,49 +13,57 @@ public struct Command {
 		command = components.removeFirst()
 
 		var inString = false
+		var startingString = false
 		var remainingComponents = [String]()
 		for component in components {
-			var appendingComponent = component
+			startingString = false
 
+			var appendingComponent = component
 			if appendingComponent.hasPrefix("\"") {
+				if !inString {
+					startingString = true
+				}
+
 				inString = true
 
-				appendingComponent.replaceRange((appendingComponent.startIndex ... appendingComponent.startIndex), with: "")
+				appendingComponent.replaceSubrange((appendingComponent.startIndex ... appendingComponent.startIndex), with: "")
 			}
 
+			var endingString = false
 			if appendingComponent.hasSuffix("\"") {
 				inString = false
+				endingString = true
 
-				appendingComponent.replaceRange((appendingComponent.endIndex.predecessor() ..< appendingComponent.endIndex), with: "")
+				appendingComponent.replaceSubrange((appendingComponent.characters.index(before: appendingComponent.endIndex) ..< appendingComponent.endIndex), with: "")
 			}
 
-			if inString {
+			if (inString || endingString) && !startingString {
 				appendingComponent = remainingComponents.removeLast() + " " + appendingComponent
 			}
 
 			remainingComponents.append(appendingComponent)
 		}
 
-		args = remainingComponents ?? []
+		args = remainingComponents
 	}
 
 	public func run() -> (standardOutput: String?, standardError: String?, exitCode: Int) {
 		// todo: fix piping tasks along, e.g.: `git diff HEAD | mate` should work
-		let task = NSTask()
+		let task = Process()
 		task.launchPath = command
 		task.arguments = args
 
-		let standardOutputPipe = NSPipe()
+		let standardOutputPipe = Pipe()
 		task.standardOutput = standardOutputPipe
 
-		let standardErrorPipe = NSPipe()
+		let standardErrorPipe = Pipe()
 		task.standardError = standardErrorPipe
 
 		task.launch()
 		task.waitUntilExit()
 
-		let standardOutput = String(data: standardOutputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: NSUTF8StringEncoding)
-		let standardError = String(data: standardErrorPipe.fileHandleForReading.readDataToEndOfFile(), encoding: NSUTF8StringEncoding)
+		let standardOutput = String(data: standardOutputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: String.Encoding.utf8)
+		let standardError = String(data: standardErrorPipe.fileHandleForReading.readDataToEndOfFile(), encoding: String.Encoding.utf8)
 		let exitCode = Int(task.terminationStatus)
 
 		return (standardOutput: standardOutput, standardError: standardError, exitCode: exitCode)

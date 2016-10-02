@@ -1,10 +1,10 @@
 import Foundation
 
-public final class Program<D: Defaults> {
-	func run(argParser: ArgumentProvider) {
-		let fileManager = NSFileManager()
+public final class Armadillo<D: Defaults> {
+	func run(_ argParser: ArgumentProvider) {
+		let fileManager = FileManager()
 		let path: String = argParser.value(forArgument: "path") as? String ?? fileManager.currentDirectoryPath
-		let url = NSURL(fileURLWithPath: path)
+		let url = URL(fileURLWithPath: path)
 		fileManager.changeCurrentDirectoryPath(path)
 
 		guard let repl: REPL = {
@@ -20,8 +20,8 @@ public final class Program<D: Defaults> {
 			Memory()
 		]
 
-		guard let cmdPath = NSTask.which(repl.binary) else { return }
-		guard let workingDir = url.lastPathComponent else { return }
+		guard let cmdPath = Process.which(repl.binary) else { return }
+		let workingDir = url.lastPathComponent
 
 		while true {
 			print("\(workingDir) % \(repl.binary) ", terminator: "")
@@ -29,7 +29,7 @@ public final class Program<D: Defaults> {
 			guard let command = Command(raw: cmdPath + " " + {
 				// todo: stop using readLine() and move to something like `libedit`
 				// which gives us support for handling arrow key events
-				if let input = readLine() where !input.characters.isEmpty {
+				if let input = readLine(), !input.characters.isEmpty {
 					history.forEach {
 						$0.push(input)
 					}
@@ -42,9 +42,9 @@ public final class Program<D: Defaults> {
 
 			let status = command.run()
 
-			if let err = status.standardError where !err.isEmpty {
+			if let err = status.standardError, !err.isEmpty {
 				print(err)
-			} else if let out = status.standardOutput where !out.isEmpty {
+			} else if let out = status.standardOutput , !out.isEmpty {
 				print(out)
 			}
 		}
