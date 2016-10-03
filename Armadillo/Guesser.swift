@@ -33,6 +33,10 @@ public struct REPL {
 			} else {
 				let task = Process()
 				task.launchPath = Process.which(p.binary)
+				if (task.launchPath ?? "").isEmpty {
+					continue
+				}
+
 				task.arguments = p.args
 
 				let pipe = Pipe()
