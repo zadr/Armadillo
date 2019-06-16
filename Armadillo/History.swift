@@ -84,7 +84,7 @@ open class Memory: History {
 }
 
 open class Disk<D: Defaults>: History {
-	open let resourceURL: URL
+	let resourceURL: URL
 
 	init(resourceURL: URL) {
 		self.resourceURL = resourceURL

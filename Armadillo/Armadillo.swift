@@ -29,7 +29,7 @@ public final class Armadillo<D: Defaults> {
 			guard let command = Command(raw: cmdPath + " " + {
 				// todo: stop using readLine() and move to something like `libedit`
 				// which gives us support for handling arrow key events
-				if let input = readLine(), !input.characters.isEmpty {
+				if let input = readLine(), !input.isEmpty {
 					history.forEach {
 						$0.push(input)
 					}

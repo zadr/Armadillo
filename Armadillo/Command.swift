@@ -34,7 +34,7 @@ public struct Command {
 				inString = false
 				endingString = true
 
-				appendingComponent.replaceSubrange((appendingComponent.characters.index(before: appendingComponent.endIndex) ..< appendingComponent.endIndex), with: "")
+				appendingComponent.replaceSubrange((appendingComponent.index(before: appendingComponent.endIndex) ..< appendingComponent.endIndex), with: "")
 			}
 
 			if (inString || endingString) && !startingString {
