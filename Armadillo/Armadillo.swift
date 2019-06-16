@@ -1,6 +1,6 @@
 import Foundation
 
-public final class Armadillo<D: Defaults> {
+public final class Armadillo {
 	func run(_ argParser: ArgumentProvider) {
 		let fileManager = FileManager()
 		let path: String = argParser.value(forArgument: "path") as? String ?? fileManager.currentDirectoryPath
