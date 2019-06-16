@@ -18,12 +18,12 @@ public final class Armadillo {
 		var history = [String]()
 		var historyIndex: Array<String>.Index? = nil
 
-		guard let cmdPath = Process.which(repl.binary) else { return }
-		let workingDir = url.lastPathComponent
+		guard let cmdPath = Process.which(repl.binary) else { exit(2) }
+
 		let input = Input()
 
 		while true {
-			FileHandle.standardOutput.write("\(workingDir) % \(repl.binary) ".data(using: .utf8)!)
+			FileHandle.standardOutput.write("% \(repl.binary) ".data(using: .utf8)!)
 
 			let commandSuffix: String?
 
