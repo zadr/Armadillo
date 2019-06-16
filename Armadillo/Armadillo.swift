@@ -79,20 +79,16 @@ public final class Armadillo {
 
 			historyIndex = nil
 
-			guard let suffix = commandSuffix else {
-				continue
-			}
-
-			guard let command = Command(raw: cmdPath + " " + suffix) else {
+			guard let suffix = commandSuffix, let command = Command(raw: cmdPath + " " + suffix) else {
 				continue
 			}
 
 			let status = command.run()
 
 			if let err = status.standardError, !err.isEmpty {
-				print(err)
-			} else if let out = status.standardOutput , !out.isEmpty {
-				print(out)
+				FileHandle.standardOutput.write("\(err)".data(using: .utf8)!)
+			} else if let out = status.standardOutput, !out.isEmpty {
+				FileHandle.standardOutput.write("\(out)".data(using: .utf8)!)
 			}
 		}
 	}
