@@ -7,7 +7,7 @@ public struct Command {
 	public init?(raw: String) {
 		var components = raw.components(separatedBy: " ")
 		guard !components.isEmpty else {
-			return nil
+			fatalError()
 		}
 
 		command = components.removeFirst()

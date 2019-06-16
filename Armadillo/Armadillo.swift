@@ -15,30 +15,77 @@ public final class Armadillo<D: Defaults> {
 			return REPL.repl(for: url)
 		}() else { exit(1) }
 
-		let history: [History] = [
-			Disk<D>(resourceURL: url),
-			Memory()
-		]
+		var history = [String]()
+		var historyIndex: Array<String>.Index? = nil
 
 		guard let cmdPath = Process.which(repl.binary) else { return }
 		let workingDir = url.lastPathComponent
+		let input = Input()
 
 		while true {
-			print("\(workingDir) % \(repl.binary) ", terminator: "")
+			FileHandle.standardOutput.write("\(workingDir) % \(repl.binary) ".data(using: .utf8)!)
 
-			guard let command = Command(raw: cmdPath + " " + {
-				// todo: stop using readLine() and move to something like `libedit`
-				// which gives us support for handling arrow key events
-				if let input = readLine(), !input.isEmpty {
-					history.forEach {
-						$0.push(input)
+			let commandSuffix: String?
+
+			switch input.read() {
+			case .text(let data):
+				if data.isEmpty {
+					commandSuffix = history.last
+				} else {
+					commandSuffix = String(bytes: data, encoding: .utf8)
+					history.append(commandSuffix!)
+				}
+				break
+			case .arrowKey(let arrowKey):
+				switch arrowKey {
+				case .up:
+					if !history.isEmpty {
+						if historyIndex == nil {
+							historyIndex = history.endIndex
+						} else if historyIndex != history.startIndex {
+							historyIndex = history.index(before: historyIndex!)
+						} else {
+							historyIndex = nil
+						}
 					}
 
-					return input
-				} else if let input = history.last?.peekLastCommand() {
-					return input
-				} else { return "" }
-			}()) else { continue }
+					if let index = historyIndex {
+						commandSuffix = history[history.index(before: index)]
+					} else {
+						commandSuffix = nil
+					}
+				case .down:
+					if !history.isEmpty {
+						if historyIndex == nil {
+							// nothing to do
+						} else if historyIndex != history.endIndex {
+							historyIndex = history.index(after: historyIndex!)
+						} else {
+							historyIndex = nil
+						}
+					}
+
+					if let index = historyIndex {
+						commandSuffix = history[history.index(after: index)]
+					} else {
+						commandSuffix = nil
+					}
+				default:
+					commandSuffix = nil
+					break
+				}
+				break
+			}
+
+			historyIndex = nil
+
+			guard let suffix = commandSuffix else {
+				continue
+			}
+
+			guard let command = Command(raw: cmdPath + " " + suffix) else {
+				continue
+			}
 
 			let status = command.run()
 
